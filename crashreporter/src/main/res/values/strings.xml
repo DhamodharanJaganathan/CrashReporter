@@ -5,6 +5,7 @@
     <string name="view_crash_report">View Crash Report</string>
     <string name="check_your_message_here">Check your crashes and exceptions here.</string>
     <string name="delete_confirmation_msg">Are you sure to delete all the crash logs</string>
+    <string name="delete_confirmation_msg_logpage">Are you sure to delete this log</string>
     <string name="cancel">CANCEL</string>
     <string name="ok">OK</string>
 </resources>

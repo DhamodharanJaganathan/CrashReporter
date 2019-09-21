@@ -1,16 +1,17 @@
 package com.balsikandar.crashreporter.ui;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
-import android.support.v4.content.FileProvider;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v4.content.FileProvider;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-import com.balsikandar.crashreporter.BuildConfig;
 import com.balsikandar.crashreporter.R;
 import com.balsikandar.crashreporter.utils.AppUtils;
 import com.balsikandar.crashreporter.utils.FileUtils;
@@ -20,6 +21,7 @@ import java.io.File;
 public class LogMessageActivity extends AppCompatActivity {
 
     private TextView appInfo;
+    private String file_path_for_delete;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,12 +63,22 @@ public class LogMessageActivity extends AppCompatActivity {
         String filePath = null;
         if (intent != null) {
             filePath = intent.getStringExtra("LogMessage");
+            file_path_for_delete = filePath;
         }
 
         if (item.getItemId() == R.id.delete_log) {
-            if (FileUtils.delete(filePath)) {
-                finish();
-            }
+            new AlertDialog.Builder(this)
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            if (FileUtils.delete(file_path_for_delete)) {
+                                finish();
+                            }
+                        }
+                    })
+                    .setMessage(R.string.delete_confirmation_msg_logpage)
+                    .setNegativeButton(android.R.string.no, null)
+                    .show();
+
             return true;
         } else if (item.getItemId() == R.id.share_crash_log) {
             //shareCrashReport(filePath);
@@ -92,7 +104,7 @@ public class LogMessageActivity extends AppCompatActivity {
 
         Intent shareIntent = new Intent();
         shareIntent.setAction(Intent.ACTION_SEND);
-        shareIntent.putExtra(Intent.EXTRA_TEXT,appInfo.getText().toString());
+        shareIntent.putExtra(Intent.EXTRA_TEXT, appInfo.getText().toString());
         shareIntent.putExtra(Intent.EXTRA_STREAM, path);
         shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         shareIntent.setType("*/*");

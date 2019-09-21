@@ -1,10 +1,12 @@
 package com.balsikandar.crashreporter.ui;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -36,7 +38,15 @@ public class CrashReporterActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.delete_crash_logs) {
-            clearCrashLog();
+            new AlertDialog.Builder(this)
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            clearCrashLog();
+                        }
+                    })
+                    .setMessage(R.string.delete_confirmation_msg)
+                    .setNegativeButton(android.R.string.no, null)
+                    .show();
             return true;
         } else {
             return super.onOptionsItemSelected(item);
