@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         //Crashes and exceptions are also captured from other threads
-        new Thread(new Runnable() {
+       /* new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
                 }
 
             }
-        }).start();
+        }).start();*/
 
         mContext = this;
         findViewById(R.id.crashLogActivity).setOnClickListener(new View.OnClickListener() {

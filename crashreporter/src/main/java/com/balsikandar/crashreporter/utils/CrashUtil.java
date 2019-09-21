@@ -1,5 +1,7 @@
 package com.balsikandar.crashreporter.utils;
 
+import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -21,8 +23,6 @@ import java.io.Writer;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-
-import static android.content.Context.NOTIFICATION_SERVICE;
 
 public class CrashUtil {
 
@@ -92,6 +92,41 @@ public class CrashUtil {
 
         if (CrashReporter.isNotificationEnabled()) {
             Context context = CrashReporter.getContext();
+            NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+            NotificationCompat.Builder builder = null;
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                int importance = NotificationManager.IMPORTANCE_DEFAULT;
+                NotificationChannel notificationChannel = new NotificationChannel("ID", "Name", importance);
+                notificationManager.createNotificationChannel(notificationChannel);
+                builder = new NotificationCompat.Builder(context.getApplicationContext(), notificationChannel.getId());
+            } else {
+                builder = new NotificationCompat.Builder(context.getApplicationContext());
+            }
+
+            Intent intent = CrashReporter.getLaunchIntent();
+            intent.putExtra(Constants.LANDING, isCrash);
+            intent.setAction(Long.toString(System.currentTimeMillis()));
+
+            PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+            builder.setContentIntent(pendingIntent);
+
+            builder = builder
+                    .setSmallIcon(R.drawable.ic_warning_black_24dp)
+                    .setColor(ContextCompat.getColor(context, R.color.colorAccent_CrashReporter))
+                    .setContentTitle(context.getString(R.string.view_crash_report))
+                    .setTicker(context.getString(R.string.cancel))
+                    .setDefaults(Notification.DEFAULT_ALL)
+                    .setAutoCancel(true);
+            if (TextUtils.isEmpty(localisedMsg)) {
+                builder.setContentText(context.getString(R.string.check_your_message_here));
+            } else {
+                builder.setContentText(localisedMsg);
+            }
+            notificationManager.notify(0, builder.build());
+        }
+
+        /*if (CrashReporter.isNotificationEnabled()) {
+            Context context = CrashReporter.getContext();
 
             NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
             builder.setSmallIcon(R.drawable.ic_warning_black_24dp);
@@ -117,7 +152,7 @@ public class CrashUtil {
             NotificationManager notificationManager = (NotificationManager) context.
                     getSystemService(NOTIFICATION_SERVICE);
             notificationManager.notify(Constants.NOTIFICATION_ID, builder.build());
-        }
+        }*/
     }
 
     private static String getStackTrace(Throwable e) {
