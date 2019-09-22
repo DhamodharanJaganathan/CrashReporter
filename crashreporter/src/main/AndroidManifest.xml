@@ -1,31 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.balsikandar.crashreporter">
+    package="com.dhamodharan.crashreporter">
 
 
     <application
         android:supportsRtl="true">
 
         <provider
-            android:name=".CrashReporterInitProvider"
+            android:name="com.dhamodharan.crashreporter.CrashReporterInitProvider"
             android:authorities="${applicationId}.CrashReporterInitProvider"
             android:enabled="true"
             android:exported="false" />
 
         <activity
-            android:name=".ui.CrashReporterActivity"
+            android:name="com.dhamodharan.crashreporter.ui.CrashReporterActivity"
             android:launchMode="singleTask"
-            android:taskAffinity="com.balsikandar.android.task"
+            android:taskAffinity="com.dhamodharan.android.task"
             android:theme="@style/CrashReporter.Theme" />
 
         <activity
-            android:name=".ui.LogMessageActivity"
-            android:parentActivityName=".ui.CrashReporterActivity"
+            android:name="com.dhamodharan.crashreporter.ui.LogMessageActivity"
+            android:parentActivityName="com.dhamodharan.crashreporter.ui.CrashReporterActivity"
             android:theme="@style/CrashReporter.Theme" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"
-            android:authorities="com.balsikandar.crashreporter"
+            android:authorities="com.dhamodharan.crashreporter"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
