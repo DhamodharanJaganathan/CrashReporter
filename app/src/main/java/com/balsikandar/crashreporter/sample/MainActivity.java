@@ -3,15 +3,12 @@ package com.balsikandar.crashreporter.sample;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.Toast;
 
 import com.balsikandar.crashreporter.CrashReporter;
 import com.balsikandar.crashreporter.ui.CrashReporterActivity;
 
-import java.io.File;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
@@ -44,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Object x = new Integer(0);
-                System.out.println((String)x);
+                System.out.println((String) x);
 
             }
         });
@@ -60,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         //Crashes and exceptions are also captured from other threads
-       /* new Thread(new Runnable() {
+        new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
@@ -72,13 +69,13 @@ public class MainActivity extends AppCompatActivity {
                 }
 
             }
-        }).start();*/
+        }).start();
 
         mContext = this;
         findViewById(R.id.crashLogActivity).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent =  new Intent(mContext, CrashReporterActivity.class);
+                Intent intent = new Intent(mContext, CrashReporterActivity.class);
                 startActivity(intent);
             }
         });
